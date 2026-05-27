@@ -1,0 +1,183 @@
+.about-wrapper {
+  padding-top: 2rem;
+  padding-bottom: 4rem;
+}
+
+.about-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.page-title {
+  font-size: 2.8rem;
+  margin-top: 0.8rem;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.05em;
+  background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-cream) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.page-subtitle {
+  color: var(--text-secondary);
+  font-size: 1.05rem;
+  max-width: 600px;
+  margin: 0 auto;
+  font-weight: 300;
+}
+
+/* Story Section */
+.about-story {
+  padding: 3rem;
+  margin-bottom: 4rem;
+}
+
+.story-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+}
+
+@media (min-width: 768px) {
+  .story-grid {
+    grid-template-columns: 1.2fr 0.8fr;
+  }
+}
+
+.story-text h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1.2rem;
+}
+
+.story-text p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin-bottom: 1.2rem;
+  font-weight: 300;
+  line-height: 1.7;
+}
+
+.story-text p:last-child {
+  margin-bottom: 0;
+}
+
+.story-quote {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-left: 2px solid var(--accent-gold);
+  padding-left: 2rem;
+}
+
+.story-quote blockquote {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-style: italic;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  color: var(--accent-cream-light);
+}
+
+.story-quote cite {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent-gold);
+  font-style: normal;
+  font-weight: 500;
+}
+
+/* Philosophy Pillars Section */
+.section-title {
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 1.8rem;
+}
+
+.pillar-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  max-width: 650px;
+  margin: 0 auto 2rem auto;
+  border-radius: 30px;
+}
+
+.tab-btn {
+  flex: 1;
+  background: none;
+  border: none;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  padding: 0.75rem 1rem;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: var(--transition-normal);
+}
+
+.tab-btn:hover {
+  color: var(--text-primary);
+}
+
+.tab-btn.active {
+  background: rgba(212, 175, 55, 0.1);
+  color: var(--accent-gold);
+}
+
+.pillar-content {
+  padding: 0;
+  overflow: hidden;
+}
+
+.pillar-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .pillar-grid {
+    grid-template-columns: 1fr 1.2fr;
+  }
+}
+
+.pillar-image-container {
+  height: 300px;
+  background: #121418;
+}
+
+@media (min-width: 768px) {
+  .pillar-image-container {
+    height: 100%;
+    min-height: 350px;
+  }
+}
+
+.pillar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pillar-details {
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.pillar-details h2 {
+  font-size: 2rem;
+  margin-top: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.pillar-details p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  font-weight: 300;
+}

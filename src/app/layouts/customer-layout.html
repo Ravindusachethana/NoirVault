@@ -1,0 +1,122 @@
+<!-- Navigation Header -->
+<header class="navbar glass-panel">
+  <div class="nav-container">
+    <!-- Brand Logo -->
+    <a routerLink="/shop" class="brand-logo">A U R A</a>
+
+    <!-- Nav Items -->
+    <nav class="nav-links">
+      <a routerLink="/shop" routerLinkActive="active-link" class="nav-item">Shop</a>
+      <a routerLink="/collection" routerLinkActive="active-link" class="nav-item">Collection</a>
+      <a routerLink="/limited-edition" routerLinkActive="active-link" class="nav-item">Limited Edition</a>
+      <a routerLink="/about-us" routerLinkActive="active-link" class="nav-item">About Us</a>
+    </nav>
+
+    <!-- Controls -->
+    <div class="nav-controls">
+      <!-- Search Bar -->
+      <div class="search-box">
+        <input 
+          type="text" 
+          placeholder="Search fragrance..." 
+          [(ngModel)]="searchTerm" 
+          (ngModelChange)="onSearchChange()"
+          class="search-input"
+        />
+        <span class="search-icon">🔍</span>
+      </div>
+
+      <!-- Cart Button -->
+      <button class="cart-btn" (click)="toggleCartDrawer()">
+        <span class="cart-icon">👜</span>
+        <span class="cart-badge" *ngIf="firebaseService.cartCount() > 0">
+          {{ firebaseService.cartCount() }}
+        </span>
+      </button>
+
+      <!-- Profile Section -->
+      <div class="profile-menu-container" *ngIf="firebaseService.currentUser() as user">
+        <button class="profile-avatar" (click)="toggleProfileMenu()">
+          {{ user.displayName.charAt(0).toUpperCase() }}
+        </button>
+        
+        <!-- Dropdown Menu -->
+        <div class="profile-dropdown glass-panel" *ngIf="showProfileMenu()">
+          <div class="dropdown-header">
+            <p class="user-name">{{ user.displayName }}</p>
+            <p class="user-email">{{ user.email }}</p>
+            <span class="role-badge badge">{{ user.role }}</span>
+          </div>
+          <hr class="divider"/>
+          <button class="dropdown-item logout-item" (click)="logout()">
+            Sign Out
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Main Page Outlet -->
+<main class="page-content">
+  <router-outlet></router-outlet>
+</main>
+
+<!-- Shopping Cart Drawer -->
+<div class="cart-overlay" [class.open]="showCartDrawer()" (click)="toggleCartDrawer()"></div>
+<div class="cart-drawer glass-panel" [class.open]="showCartDrawer()">
+  <div class="drawer-header">
+    <h3>Shopping Bag</h3>
+    <button class="close-drawer" (click)="toggleCartDrawer()">✕</button>
+  </div>
+  
+  <div class="drawer-body">
+    <!-- Empty State -->
+    <div class="empty-cart" *ngIf="firebaseService.cart().length === 0">
+      <div class="empty-icon">👜</div>
+      <p>Your bag is empty.</p>
+      <button class="btn btn-primary" (click)="toggleCartDrawer()">Discover Fragrances</button>
+    </div>
+
+    <!-- Items List -->
+    <div class="cart-items-list" *ngIf="firebaseService.cart().length > 0">
+      <div class="cart-item-card" *ngFor="let item of firebaseService.cart()">
+        <img [src]="item.product.imageUrl" [alt]="item.product.name" class="cart-item-image"/>
+        <div class="cart-item-details">
+          <h4 class="cart-item-name">{{ item.product.name }}</h4>
+          <p class="cart-item-price">${{ item.product.price }}</p>
+          <div class="cart-item-qty-control">
+            <button class="qty-btn" (click)="updateQuantity(item.product.id, item.quantity - 1)">-</button>
+            <span class="qty-val">{{ item.quantity }}</span>
+            <button class="qty-btn" (click)="updateQuantity(item.product.id, item.quantity + 1)">+</button>
+          </div>
+        </div>
+        <button class="remove-item-btn" (click)="removeItem(item.product.id)">✕</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Drawer Footer -->
+  <div class="drawer-footer" *ngIf="firebaseService.cart().length > 0">
+    <div class="total-row">
+      <span>Subtotal</span>
+      <span class="total-price">${{ firebaseService.cartTotal() }}</span>
+    </div>
+    <button class="btn btn-primary w-full" [disabled]="checkoutSuccess()" (click)="checkout()">
+      <span *ngIf="!checkoutSuccess()">Secure Checkout</span>
+      <span *ngIf="checkoutSuccess()">Processing...</span>
+    </button>
+  </div>
+</div>
+
+<!-- Simulated Checkout Success Modal -->
+<div class="checkout-modal-overlay" *ngIf="checkoutSuccess()">
+  <div class="checkout-modal glass-panel animate-fade-in">
+    <div class="success-checkmark">
+      <div class="check-icon">✓</div>
+    </div>
+    <h2>Order Placed Successfully</h2>
+    <p>Thank you for choosing AURA. A luxury olfactory experience awaits you.</p>
+    <p class="sub-text">We have sent a receipt to your email address.</p>
+  </div>
+</div>

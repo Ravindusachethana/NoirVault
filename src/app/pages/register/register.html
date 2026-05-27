@@ -1,0 +1,138 @@
+<div class="auth-wrapper">
+  <!-- Glowing Background Decors -->
+  <div class="glow-orb orb-1"></div>
+  <div class="glow-orb orb-2"></div>
+
+  <div class="auth-card glass-panel animate-fade-in">
+    <div class="brand-header">
+      <h1 class="brand-logo">A U R A</h1>
+      <p class="brand-tagline">Create your bespoke fragrance experience</p>
+    </div>
+
+    <!-- Feedback Banners -->
+    <div class="alert alert-error animate-fade-in" *ngIf="errorMessage()">
+      <span class="alert-icon">⚠️</span>
+      <p>{{ errorMessage() }}</p>
+    </div>
+    
+    <div class="alert alert-success animate-fade-in" *ngIf="successMessage()">
+      <span class="alert-icon">✓</span>
+      <p>{{ successMessage() }}</p>
+    </div>
+
+    <!-- Registration Form -->
+    <form #registerForm="ngForm" (ngSubmit)="onSubmit(registerForm)" novalidate>
+      
+      <!-- Full Name -->
+      <div class="form-group">
+        <label class="form-label" for="name">Full Name</label>
+        <input 
+          type="text" 
+          id="name" 
+          name="name" 
+          class="form-input" 
+          placeholder="e.g. John Doe"
+          [(ngModel)]="name"
+          #nameInput="ngModel"
+          required
+        />
+        <span class="input-error" *ngIf="nameInput.touched && nameInput.invalid">
+          Name is required.
+        </span>
+      </div>
+
+      <!-- Email Address -->
+      <div class="form-group">
+        <label class="form-label" for="email">Email Address</label>
+        <input 
+          type="email" 
+          id="email" 
+          name="email" 
+          class="form-input" 
+          placeholder="e.g. name@domain.com"
+          [(ngModel)]="email"
+          #emailInput="ngModel"
+          required
+          email
+        />
+        <span class="input-error" *ngIf="emailInput.touched && emailInput.invalid">
+          Please enter a valid email address.
+        </span>
+      </div>
+
+      <!-- Password -->
+      <div class="form-group">
+        <label class="form-label" for="password">Password</label>
+        <input 
+          type="password" 
+          id="password" 
+          name="password" 
+          class="form-input" 
+          placeholder="Min. 6 characters"
+          [(ngModel)]="password"
+          #passwordInput="ngModel"
+          required
+          minlength="6"
+        />
+        <span class="input-error" *ngIf="passwordInput.touched && passwordInput.invalid">
+          Password must be at least 6 characters.
+        </span>
+      </div>
+
+      <!-- Confirm Password -->
+      <div class="form-group">
+        <label class="form-label" for="confirmPassword">Confirm Password</label>
+        <input 
+          type="password" 
+          id="confirmPassword" 
+          name="confirmPassword" 
+          class="form-input" 
+          placeholder="Confirm your password"
+          [(ngModel)]="confirmPassword"
+          #confirmInput="ngModel"
+          required
+        />
+        <span class="input-error" *ngIf="confirmInput.touched && password !== confirmPassword">
+          Passwords do not match.
+        </span>
+      </div>
+
+      <!-- Role Selector (Pill switcher) -->
+      <div class="form-group">
+        <label class="form-label">Register As</label>
+        <div class="role-selector-pills">
+          <button 
+            type="button" 
+            class="role-pill" 
+            [class.active]="role === 'customer'"
+            (click)="role = 'customer'"
+          >
+            Customer
+          </button>
+          <button 
+            type="button" 
+            class="role-pill" 
+            [class.active]="role === 'admin'"
+            (click)="role = 'admin'"
+          >
+            Administrator
+          </button>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <button 
+        type="submit" 
+        class="btn btn-primary w-full submit-btn" 
+        [disabled]="registerForm.invalid || submitting() || (password !== confirmPassword)"
+      >
+        <span *ngIf="!submitting()">Create Account</span>
+        <span *ngIf="submitting()" class="spinner-text">Registering...</span>
+      </button>
+    </form>
+
+    <div class="auth-footer">
+      <p>Already have an account? <a routerLink="/login" class="auth-link">Sign In</a></p>
+    </div>
+  </div>
+</div>

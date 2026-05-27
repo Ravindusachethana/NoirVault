@@ -1,0 +1,85 @@
+<div class="form-wrapper container">
+  <div class="form-card glass-panel animate-fade-in">
+    <div class="form-header">
+      <span class="badge">Atelier Chapters</span>
+      <h2>Create New Olfactory Collection</h2>
+      <p class="subtitle">Define a new conceptual group of fragrances, setting a theme and design cover banner.</p>
+    </div>
+
+    <!-- Error Banner -->
+    <div class="alert alert-error animate-fade-in" *ngIf="errorMessage()">
+      <span class="alert-icon">⚠️</span>
+      <p>{{ errorMessage() }}</p>
+    </div>
+
+    <form #collForm="ngForm" (ngSubmit)="onSubmit(collForm)" novalidate>
+      
+      <!-- Collection Name -->
+      <div class="form-group">
+        <label class="form-label" for="name">Collection Name</label>
+        <input 
+          type="text" 
+          id="name" 
+          name="name" 
+          class="form-input" 
+          placeholder="e.g. Velvet & Smoke"
+          [(ngModel)]="name"
+          #nameInput="ngModel"
+          required
+        />
+        <span class="input-error" *ngIf="nameInput.touched && nameInput.invalid">
+          Collection name is required.
+        </span>
+      </div>
+
+      <!-- Banner Image URL -->
+      <div class="form-group">
+        <label class="form-label" for="imageUrl">Cover Banner Image URL</label>
+        <input 
+          type="url" 
+          id="imageUrl" 
+          name="imageUrl" 
+          class="form-input" 
+          placeholder="e.g. https://images.unsplash.com/..."
+          [(ngModel)]="imageUrl"
+          #urlInput="ngModel"
+          required
+        />
+        <span class="input-error" *ngIf="urlInput.touched && urlInput.invalid">
+          Please enter a valid image URL.
+        </span>
+      </div>
+
+      <!-- Description -->
+      <div class="form-group">
+        <label class="form-label" for="description">Concept Narrative</label>
+        <textarea 
+          id="description" 
+          name="description" 
+          rows="5" 
+          class="form-input text-area" 
+          placeholder="Narrate the story, mood profile, and concept behind this collection..."
+          [(ngModel)]="description"
+          #descInput="ngModel"
+          required
+        ></textarea>
+        <span class="input-error" *ngIf="descInput.touched && descInput.invalid">
+          A narrative description is required.
+        </span>
+      </div>
+
+      <!-- Actions -->
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" (click)="cancel()">Cancel</button>
+        <button 
+          type="submit" 
+          class="btn btn-primary" 
+          [disabled]="collForm.invalid || submitting()"
+        >
+          <span *ngIf="!submitting()">Create Collection</span>
+          <span *ngIf="submitting()">Creating...</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,153 @@
+<div class="form-wrapper container">
+  <div class="form-card glass-panel animate-fade-in">
+    <div class="form-header">
+      <span class="badge" [class.badge-limited]="isLimitedPage()">
+        {{ isLimitedPage() ? 'Reserve Batch' : 'Standard Collection' }}
+      </span>
+      <h2>{{ isLimitedPage() ? 'Add Limited Edition Reserve Scent' : 'Add New Olfactory Formulation' }}</h2>
+      <p class="subtitle">Populate the master database with new ingredients, formulations, and retail pricing.</p>
+    </div>
+
+    <!-- Error Banner -->
+    <div class="alert alert-error animate-fade-in" *ngIf="errorMessage()">
+      <span class="alert-icon">⚠️</span>
+      <p>{{ errorMessage() }}</p>
+    </div>
+
+    <form #prodForm="ngForm" (ngSubmit)="onSubmit(prodForm)" novalidate>
+      
+      <!-- Scent Name -->
+      <div class="form-group">
+        <label class="form-label" for="name">Fragrance Name</label>
+        <input 
+          type="text" 
+          id="name" 
+          name="name" 
+          class="form-input" 
+          placeholder="e.g. Amber Oud"
+          [(ngModel)]="name"
+          #nameInput="ngModel"
+          required
+        />
+        <span class="input-error" *ngIf="nameInput.touched && nameInput.invalid">
+          Fragrance name is required.
+        </span>
+      </div>
+
+      <div class="row-2">
+        <!-- Price -->
+        <div class="form-group">
+          <label class="form-label" for="price">Retail Price ($)</label>
+          <input 
+            type="number" 
+            id="price" 
+            name="price" 
+            class="form-input" 
+            placeholder="e.g. 185"
+            [(ngModel)]="price"
+            #priceInput="ngModel"
+            required
+            min="1"
+          />
+          <span class="input-error" *ngIf="priceInput.touched && (priceInput.invalid || priceInput.value <= 0)">
+            Must be a valid positive price.
+          </span>
+        </div>
+
+        <!-- Category -->
+        <div class="form-group">
+          <label class="form-label" for="category">Olfactory Family</label>
+          <select 
+            id="category" 
+            name="category" 
+            class="form-input select-input" 
+            [(ngModel)]="category"
+          >
+            <option value="Woody">Woody</option>
+            <option value="Floral">Floral</option>
+            <option value="Fresh">Fresh</option>
+            <option value="Oriental">Oriental</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Notes Profile -->
+      <div class="form-group">
+        <label class="form-label" for="notes">Notes Profile</label>
+        <input 
+          type="text" 
+          id="notes" 
+          name="notes" 
+          class="form-input" 
+          placeholder="e.g. Oud, Saffron, Rose, Sandalwood (comma separated)"
+          [(ngModel)]="notes"
+          #notesInput="ngModel"
+          required
+        />
+        <span class="input-error" *ngIf="notesInput.touched && notesInput.invalid">
+          Scent notes profile is required.
+        </span>
+      </div>
+
+      <!-- Image URL -->
+      <div class="form-group">
+        <label class="form-label" for="imageUrl">Cover Image URL</label>
+        <input 
+          type="url" 
+          id="imageUrl" 
+          name="imageUrl" 
+          class="form-input" 
+          placeholder="e.g. https://images.unsplash.com/..."
+          [(ngModel)]="imageUrl"
+          #urlInput="ngModel"
+          required
+        />
+        <span class="input-error" *ngIf="urlInput.touched && urlInput.invalid">
+          Please enter a valid image URL.
+        </span>
+      </div>
+
+      <!-- Description -->
+      <div class="form-group">
+        <label class="form-label" for="description">Editorial Narration</label>
+        <textarea 
+          id="description" 
+          name="description" 
+          rows="4" 
+          class="form-input text-area" 
+          placeholder="Describe the scent evolution, inspiration, and mood profile..."
+          [(ngModel)]="description"
+          #descInput="ngModel"
+          required
+        ></textarea>
+        <span class="input-error" *ngIf="descInput.touched && descInput.invalid">
+          A description is required.
+        </span>
+      </div>
+
+      <!-- Limited Edition checkbox -->
+      <div class="checkbox-group" *ngIf="!isLimitedPage()">
+        <input 
+          type="checkbox" 
+          id="limitedEdition" 
+          name="limitedEdition" 
+          [(ngModel)]="limitedEdition"
+        />
+        <label for="limitedEdition" class="checkbox-label">This is a Limited Edition Reserve Scent</label>
+      </div>
+
+      <!-- Actions -->
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" (click)="cancel()">Cancel</button>
+        <button 
+          type="submit" 
+          class="btn btn-primary" 
+          [disabled]="prodForm.invalid || submitting() || (!price || price <= 0)"
+        >
+          <span *ngIf="!submitting()">Publish Scent</span>
+          <span *ngIf="submitting()">Publishing...</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

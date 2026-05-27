@@ -1,0 +1,62 @@
+<!-- Navigation Header -->
+<header class="navbar glass-panel">
+  <div class="nav-container">
+    <!-- Brand Logo -->
+    <a routerLink="/admin/dashboard" class="brand-logo">
+      A U R A <span class="admin-tag">ADMIN</span>
+    </a>
+
+    <!-- Nav Items -->
+    <nav class="nav-links">
+      <a routerLink="/admin/dashboard" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}" class="nav-item">Dashboard</a>
+      <a routerLink="/admin/add-product" routerLinkActive="active-link" class="nav-item">Add Product</a>
+      <a routerLink="/admin/add-collection" routerLinkActive="active-link" class="nav-item">Add Collection</a>
+      <a routerLink="/admin/add-limited" routerLinkActive="active-link" class="nav-item">Add Limited Edition</a>
+      <a routerLink="/about-us" class="nav-item">About Us</a>
+    </nav>
+
+    <!-- Controls -->
+    <div class="nav-controls">
+      <!-- Search Bar -->
+      <div class="search-box">
+        <input 
+          type="text" 
+          placeholder="Search products..." 
+          [(ngModel)]="searchTerm" 
+          (ngModelChange)="onSearchChange()"
+          class="search-input"
+        />
+        <span class="search-icon">🔍</span>
+      </div>
+
+      <!-- Profile Section -->
+      <div class="profile-menu-container" *ngIf="firebaseService.currentUser() as user">
+        <button class="profile-avatar" (click)="toggleProfileMenu()">
+          {{ user.displayName.charAt(0).toUpperCase() }}
+        </button>
+        
+        <!-- Dropdown Menu -->
+        <div class="profile-dropdown glass-panel" *ngIf="showProfileMenu()">
+          <div class="dropdown-header">
+            <p class="user-name">{{ user.displayName }}</p>
+            <p class="user-email">{{ user.email }}</p>
+            <span class="role-badge badge badge-admin">Administrator</span>
+          </div>
+          <hr class="divider"/>
+          <button class="dropdown-item" routerLink="/shop">
+            Switch to Shop View
+          </button>
+          <hr class="divider"/>
+          <button class="dropdown-item logout-item" (click)="logout()">
+            Sign Out
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Main Page Outlet -->
+<main class="page-content">
+  <router-outlet></router-outlet>
+</main>

@@ -1,0 +1,162 @@
+<div class="dashboard-wrapper container">
+  <!-- Analytics Grid -->
+  <section class="stats-grid animate-fade-in">
+    <!-- Stat Item 1 -->
+    <div class="stat-card glass-panel">
+      <div class="stat-icon">👜</div>
+      <div class="stat-info">
+        <span class="stat-num">{{ totalProducts() }}</span>
+        <span class="stat-label">Total Perfumes</span>
+      </div>
+    </div>
+    
+    <!-- Stat Item 2 -->
+    <div class="stat-card glass-panel">
+      <div class="stat-icon text-gold">⭐</div>
+      <div class="stat-info">
+        <span class="stat-num text-gold">{{ totalLimited() }}</span>
+        <span class="stat-label">Reserve Batches</span>
+      </div>
+    </div>
+
+    <!-- Stat Item 3 -->
+    <div class="stat-card glass-panel">
+      <div class="stat-icon">📜</div>
+      <div class="stat-info">
+        <span class="stat-num">{{ totalCollections() }}</span>
+        <span class="stat-label">Collections</span>
+      </div>
+    </div>
+
+    <!-- Stat Item 4 -->
+    <div class="stat-card glass-panel db-card">
+      <div class="stat-icon">⚡</div>
+      <div class="stat-info">
+        <span class="stat-num mode-text" [class.simulation-mode]="firebaseService.isSimulation()">
+          {{ firebaseService.isSimulation() ? 'Simulation' : 'Live' }}
+        </span>
+        <span class="stat-label">Database Status</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Products List Table Section -->
+  <section class="table-section glass-panel animate-fade-in animate-delay-1">
+    <div class="table-header">
+      <h2>Atelier Inventory</h2>
+      <button class="btn btn-primary add-shortcut-btn" routerLink="/admin/add-product">
+        + Add New Scent
+      </button>
+    </div>
+
+    <div class="table-container">
+      <table class="inventory-table">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Olfactory Category</th>
+            <th>Notes Profile</th>
+            <th>Limited</th>
+            <th>Price</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Empty State -->
+          <tr *ngIf="getFilteredProducts().length === 0">
+            <td colspan="6" class="table-empty-state">
+              No fragrances match the search filter.
+            </td>
+          </tr>
+
+          <!-- Product Item Row -->
+          <tr *ngFor="let prod of getFilteredProducts()">
+            <td class="product-cell">
+              <img [src]="prod.imageUrl" [alt]="prod.name" class="table-thumb"/>
+              <span class="table-name">{{ prod.name }}</span>
+            </td>
+            <td>
+              <span class="table-category">{{ prod.category }}</span>
+            </td>
+            <td>
+              <span class="table-notes" title="{{ prod.notes }}">{{ prod.notes }}</span>
+            </td>
+            <td>
+              <span class="badge" *ngIf="prod.limitedEdition">Yes</span>
+              <span class="no-badge" *ngIf="!prod.limitedEdition">No</span>
+            </td>
+            <td class="price-cell">${{ prod.price }}</td>
+            <td class="actions-cell">
+              <button class="action-btn edit-btn" (click)="startEdit(prod)" title="Edit Fragrance">✏️</button>
+              <button class="action-btn delete-btn" (click)="deleteProduct(prod.id)" title="Delete Fragrance">🗑️</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+
+<!-- Inline Edit Product Modal -->
+<div class="modal-overlay" *ngIf="editingProduct() as prod" (click)="cancelEdit()">
+  <div class="edit-modal glass-panel animate-fade-in" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>Edit Olfactory Formulation</h3>
+      <button class="close-modal" (click)="cancelEdit()">✕</button>
+    </div>
+
+    <div class="modal-body">
+      <!-- Scent Name -->
+      <div class="form-group">
+        <label class="form-label" for="edit-name">Fragrance Name</label>
+        <input type="text" id="edit-name" class="form-input" [(ngModel)]="prod.name" required/>
+      </div>
+
+      <!-- Price -->
+      <div class="form-group">
+        <label class="form-label" for="edit-price">Retail Price ($)</label>
+        <input type="number" id="edit-price" class="form-input" [(ngModel)]="prod.price" required min="1"/>
+      </div>
+
+      <!-- Category -->
+      <div class="form-group">
+        <label class="form-label" for="edit-category">Olfactory Family</label>
+        <select id="edit-category" class="form-input" [(ngModel)]="prod.category">
+          <option value="Woody">Woody</option>
+          <option value="Floral">Floral</option>
+          <option value="Fresh">Fresh</option>
+          <option value="Oriental">Oriental</option>
+        </select>
+      </div>
+
+      <!-- Scent Notes -->
+      <div class="form-group">
+        <label class="form-label" for="edit-notes">Notes Profile (comma separated)</label>
+        <input type="text" id="edit-notes" class="form-input" [(ngModel)]="prod.notes" required/>
+      </div>
+
+      <!-- Image URL -->
+      <div class="form-group">
+        <label class="form-label" for="edit-image">Cover Image URL</label>
+        <input type="text" id="edit-image" class="form-input" [(ngModel)]="prod.imageUrl" required/>
+      </div>
+
+      <!-- Description -->
+      <div class="form-group">
+        <label class="form-label" for="edit-desc">Editorial Narration</label>
+        <textarea id="edit-desc" rows="3" class="form-input text-area" [(ngModel)]="prod.description" required></textarea>
+      </div>
+
+      <!-- Limited Edition -->
+      <div class="checkbox-group">
+        <input type="checkbox" id="edit-limited" [(ngModel)]="prod.limitedEdition"/>
+        <label for="edit-limited" class="checkbox-label">This is a Limited Edition Reserve Batch</label>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-secondary" (click)="cancelEdit()">Cancel</button>
+      <button class="btn btn-primary" (click)="saveEdit()" [disabled]="!prod.name || prod.price <= 0">Save Changes</button>
+    </div>
+  </div>
+</div>

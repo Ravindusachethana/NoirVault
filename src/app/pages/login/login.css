@@ -1,0 +1,161 @@
+.auth-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.5rem;
+  background-color: var(--bg-primary);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Glowing orbs for background ambiance */
+.glow-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  z-index: 1;
+  opacity: 0.15;
+  pointer-events: none;
+}
+
+.orb-1 {
+  width: 300px;
+  height: 300px;
+  background: var(--accent-gold);
+  top: -50px;
+  left: -50px;
+  animation: floatOrb 10s infinite alternate ease-in-out;
+}
+
+.orb-2 {
+  width: 400px;
+  height: 400px;
+  background: var(--accent-cream);
+  bottom: -100px;
+  right: -50px;
+  animation: floatOrb 12s infinite alternate-reverse ease-in-out;
+}
+
+@keyframes floatOrb {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(40px, 40px) scale(1.1); }
+}
+
+/* Auth Card */
+.auth-card {
+  width: 100%;
+  max-width: 440px;
+  padding: 2.5rem;
+  z-index: 2;
+  box-shadow: var(--shadow-dark);
+}
+
+.brand-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.brand-logo {
+  font-size: 2.2rem;
+  letter-spacing: 0.2em;
+  background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-cream) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0.5rem;
+}
+
+.brand-tagline {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 300;
+  letter-spacing: 0.05em;
+}
+
+/* Alert Banners */
+.alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+  padding: 0.8rem 1rem;
+  border-radius: 6px;
+  margin-bottom: 1.5rem;
+  font-size: 0.85rem;
+}
+
+.alert-error {
+  background: rgba(255, 107, 107, 0.1);
+  border: 1px solid rgba(255, 107, 107, 0.25);
+  color: #ff8787;
+}
+
+.alert-icon {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+/* Validation errors */
+.input-error {
+  color: #ff8787;
+  font-size: 0.75rem;
+  margin-top: 0.4rem;
+  letter-spacing: 0.02em;
+}
+
+/* Demo Credentials Tip */
+.demo-tip {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border-color: rgba(212, 175, 55, 0.15);
+  background: rgba(212, 175, 55, 0.02);
+}
+
+.tip-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--accent-gold);
+  margin-bottom: 0.4rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.tip-credential {
+  font-size: 0.8rem;
+  color: var(--text-primary);
+  margin-bottom: 0.4rem;
+}
+
+.tip-credential code {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 0.1rem 0.3rem;
+  border-radius: 3px;
+  color: var(--accent-cream-light);
+  font-family: monospace;
+}
+
+.tip-note {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* Footer links */
+.auth-footer {
+  text-align: center;
+  margin-top: 1.5rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.auth-link {
+  color: var(--accent-gold);
+  font-weight: 500;
+}
+
+.auth-link:hover {
+  color: var(--accent-gold-hover);
+  text-decoration: underline;
+}
+
+.submit-btn {
+  margin-top: 1rem;
+}

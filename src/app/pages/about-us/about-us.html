@@ -1,0 +1,56 @@
+<div class="about-wrapper container">
+  <!-- Brand Intro -->
+  <header class="about-header animate-fade-in">
+    <span class="badge">The Maison</span>
+    <h1 class="page-title">The House of AURA</h1>
+    <p class="page-subtitle">A legacy of blending memories, stories, and emotions into liquid art.</p>
+  </header>
+
+  <!-- Story Intro Section -->
+  <section class="about-story glass-panel animate-fade-in animate-delay-1">
+    <div class="story-grid">
+      <div class="story-text">
+        <h2>Our Heritage</h2>
+        <p>Founded on the belief that a fragrance is a personal signature, AURA is a contemporary fragrance house rooted in classic French perfumery. We synthesize natural, sustainably sourced oils and resins with modern molecular science to formulate scent portfolios that are rich, long-lasting, and intensely personal.</p>
+        <p>We reject mass-production. We do not design for the shelves; we design for the skin. Each formulation is aged, blended, and bottled under strict supervision in our lab, maintaining a direct line to the traditions of the trade.</p>
+      </div>
+      <div class="story-quote">
+        <blockquote>
+          "Perfume is the most intense form of memory. It is a silent signature, an aura that remains in a room long after you have departed."
+        </blockquote>
+        <cite>— Master Perfumer, AURA</cite>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Pillars Tab Section -->
+  <section class="pillars-section animate-fade-in animate-delay-2">
+    <h2 class="section-title">Olfactory Philosophy</h2>
+    
+    <!-- Tab Controls -->
+    <div class="pillar-tabs glass-panel">
+      <button 
+        *ngFor="let pillar of pillars" 
+        class="tab-btn" 
+        [class.active]="activePillar() === pillar.id"
+        (click)="selectPillar(pillar.id)"
+      >
+        {{ pillar.title }}
+      </button>
+    </div>
+
+    <!-- Active Tab Content -->
+    <div class="pillar-content glass-panel" *ngIf="getActivePillarData() as active">
+      <div class="pillar-grid">
+        <div class="pillar-image-container">
+          <img [src]="active.imageUrl" [alt]="active.title" class="pillar-image"/>
+        </div>
+        <div class="pillar-details">
+          <span class="badge">{{ active.subtitle }}</span>
+          <h2>{{ active.title }}</h2>
+          <p>{{ active.description }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

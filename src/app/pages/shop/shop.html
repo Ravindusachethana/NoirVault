@@ -1,0 +1,117 @@
+<div class="shop-wrapper container">
+  <!-- Hero Header Banner -->
+  <section class="shop-hero glass-panel animate-fade-in">
+    <div class="hero-content">
+      <span class="badge">The Olfactory Atelier</span>
+      <h1 class="hero-title">Curated Liquid Art</h1>
+      <p class="hero-subtitle">Indulge your senses in our collection of rare ingredients and handcrafted blends.</p>
+    </div>
+  </section>
+
+  <!-- Filter & Sort Bar -->
+  <div class="filter-bar glass-panel animate-fade-in animate-delay-1">
+    <!-- Categories List -->
+    <div class="categories-list">
+      <button 
+        *ngFor="let cat of categories" 
+        class="cat-filter-btn" 
+        [class.active]="activeCategory() === cat"
+        (click)="setCategory(cat)"
+      >
+        {{ cat }}
+      </button>
+    </div>
+
+    <!-- Sorting Selection -->
+    <div class="sort-selector">
+      <span class="sort-label">Sort by:</span>
+      <select [(ngModel)]="sortBy" class="sort-dropdown">
+        <option value="default">Default</option>
+        <option value="price-low">Price: Low to High</option>
+        <option value="price-high">Price: High to Low</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-state" *ngIf="firebaseService.loading()">
+    <div class="spinner"></div>
+    <p>Discovering exclusive essences...</p>
+  </div>
+
+  <!-- Products Grid -->
+  <div class="products-grid animate-fade-in animate-delay-2" *ngIf="!firebaseService.loading()">
+    <!-- Perfume Cards -->
+    <div 
+      class="product-card glass-panel glass-panel-hover" 
+      *ngFor="let prod of getFilteredProducts()"
+      (click)="openProductDetails(prod)"
+    >
+      <div class="product-image-container">
+        <img [src]="prod.imageUrl" [alt]="prod.name" class="product-image"/>
+        <!-- Badges -->
+        <span class="card-badge badge" *ngIf="prod.limitedEdition">Limited Edition</span>
+        <span class="card-badge badge-category">{{ prod.category }}</span>
+      </div>
+
+      <div class="product-info">
+        <div class="product-meta">
+          <h3 class="product-name">{{ prod.name }}</h3>
+          <span class="product-price">${{ prod.price }}</span>
+        </div>
+        <p class="product-notes"><strong>Notes:</strong> {{ prod.notes }}</p>
+        
+        <button class="btn btn-primary add-to-bag-btn" (click)="addToCart(prod, $event)">
+          <span>Add to Bag</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-shop" *ngIf="getFilteredProducts().length === 0">
+      <div class="empty-shop-icon">🔍</div>
+      <h3>No fragrance found</h3>
+      <p>Try adjusting your search criteria or choosing another olfactory profile.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Quick View/Detail Modal -->
+<div class="modal-overlay" *ngIf="selectedProduct() as prod" (click)="closeProductDetails()">
+  <div class="product-detail-modal glass-panel animate-fade-in" (click)="$event.stopPropagation()">
+    <button class="close-modal" (click)="closeProductDetails()">✕</button>
+
+    <div class="modal-grid">
+      <!-- Left side: Image -->
+      <div class="modal-image-container">
+        <img [src]="prod.imageUrl" [alt]="prod.name" class="modal-image"/>
+      </div>
+
+      <!-- Right side: Details -->
+      <div class="modal-details">
+        <div class="modal-header">
+          <div class="modal-badges">
+            <span class="badge badge-limited" *ngIf="prod.limitedEdition">Collector's Edition</span>
+            <span class="badge">{{ prod.category }}</span>
+          </div>
+          <h2 class="modal-title">{{ prod.name }}</h2>
+          <p class="modal-price">${{ prod.price }}</p>
+        </div>
+
+        <div class="modal-body">
+          <p class="modal-description">{{ prod.description }}</p>
+          <div class="scent-profile">
+            <span class="profile-label">Scent Profile</span>
+            <p class="profile-notes">{{ prod.notes }}</p>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-primary w-full" (click)="addSelectedToCart()">
+            Add to Shopping Bag
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

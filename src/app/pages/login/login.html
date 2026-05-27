@@ -1,0 +1,82 @@
+<div class="auth-wrapper">
+  <!-- Glowing Background Decors -->
+  <div class="glow-orb orb-1"></div>
+  <div class="glow-orb orb-2"></div>
+
+  <div class="auth-card glass-panel animate-fade-in">
+    <div class="brand-header">
+      <h1 class="brand-logo">A U R A</h1>
+      <p class="brand-tagline">Enter the world of artisanal perfumery</p>
+    </div>
+
+    <!-- Error Banner -->
+    <div class="alert alert-error animate-fade-in" *ngIf="errorMessage()">
+      <span class="alert-icon">⚠️</span>
+      <p>{{ errorMessage() }}</p>
+    </div>
+
+    <!-- Login Form -->
+    <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)" novalidate>
+      
+      <!-- Email Address -->
+      <div class="form-group">
+        <label class="form-label" for="email">Email Address</label>
+        <input 
+          type="email" 
+          id="email" 
+          name="email" 
+          class="form-input" 
+          placeholder="name@domain.com"
+          [(ngModel)]="email"
+          #emailInput="ngModel"
+          required
+          email
+        />
+        <span class="input-error" *ngIf="emailInput.touched && emailInput.invalid">
+          Please enter a valid email address.
+        </span>
+      </div>
+
+      <!-- Password -->
+      <div class="form-group">
+        <label class="form-label" for="password">Password</label>
+        <input 
+          type="password" 
+          id="password" 
+          name="password" 
+          class="form-input" 
+          placeholder="••••••••"
+          [(ngModel)]="password"
+          #passwordInput="ngModel"
+          required
+        />
+        <span class="input-error" *ngIf="passwordInput.touched && passwordInput.invalid">
+          Password is required.
+        </span>
+      </div>
+
+      <!-- Submit Button -->
+      <button 
+        type="submit" 
+        class="btn btn-primary w-full submit-btn" 
+        [disabled]="loginForm.invalid || submitting()"
+      >
+        <span *ngIf="!submitting()">Sign In</span>
+        <span *ngIf="submitting()">Verifying...</span>
+      </button>
+    </form>
+
+    <!-- Demo Credentials Tip -->
+    <div class="demo-tip glass-panel" *ngIf="firebaseService.isSimulation()">
+      <p class="tip-title">✨ Demo credentials (Simulation)</p>
+      <div class="tip-credential">
+        <span>Admin:</span> <code>admin@aura.com</code> / <code>admin123</code>
+      </div>
+      <p class="tip-note">Or create a new account via sign up below.</p>
+    </div>
+
+    <div class="auth-footer">
+      <p>Don't have an account? <a routerLink="/register" class="auth-link">Sign Up</a></p>
+    </div>
+  </div>
+</div>

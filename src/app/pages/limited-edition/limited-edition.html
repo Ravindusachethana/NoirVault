@@ -1,0 +1,87 @@
+<div class="limited-wrapper container">
+  <!-- Header -->
+  <header class="limited-header animate-fade-in">
+    <span class="badge badge-limited">Rare & Precious</span>
+    <h1 class="page-title">The Reserve Collection</h1>
+    <p class="page-subtitle">Highly concentrated extraits and rare formulations. Hand-poured in numbered crystal bottles. Once sold out, these batches will never be recreated.</p>
+  </header>
+
+  <!-- Countdown Timer Panel -->
+  <section class="countdown-panel glass-panel animate-fade-in animate-delay-1">
+    <h3 class="countdown-title">Next Batch Release Window Closes In</h3>
+    <div class="timer-boxes">
+      <div class="timer-box">
+        <span class="timer-num">{{ hours() }}</span>
+        <span class="timer-label">Hours</span>
+      </div>
+      <div class="timer-colon">:</div>
+      <div class="timer-box">
+        <span class="timer-num">{{ minutes() }}</span>
+        <span class="timer-label">Minutes</span>
+      </div>
+      <div class="timer-colon">:</div>
+      <div class="timer-box">
+        <span class="timer-num">{{ seconds() }}</span>
+        <span class="timer-label">Seconds</span>
+      </div>
+    </div>
+    <p class="countdown-footer">Simulated timer. Active reserve allocation batches are bottled weekly.</p>
+  </section>
+
+  <!-- Loading State -->
+  <div class="loading-state" *ngIf="firebaseService.loading()">
+    <div class="spinner"></div>
+    <p>Opening vault doors...</p>
+  </div>
+
+  <!-- Editorial Layout -->
+  <div class="editorial-list animate-fade-in animate-delay-2" *ngIf="!firebaseService.loading()">
+    <div 
+      class="editorial-item glass-panel" 
+      *ngFor="let prod of getLimitedProducts(); let i = index"
+      [class.row-reverse]="i % 2 === 1"
+    >
+      <!-- Image Column -->
+      <div class="editorial-image-side">
+        <img [src]="prod.imageUrl" [alt]="prod.name" class="editorial-image"/>
+        <div class="batch-stamp">Batch #{{ 104 + i }}</div>
+      </div>
+
+      <!-- Text Column -->
+      <div class="editorial-info-side">
+        <span class="badge badge-limited">Reserve Item</span>
+        <h2 class="editorial-title">{{ prod.name }}</h2>
+        <span class="editorial-price">${{ prod.price }}</span>
+        
+        <p class="editorial-desc">{{ prod.description }}</p>
+        
+        <!-- Scent Profile Details -->
+        <div class="editorial-details-box">
+          <div class="detail-item">
+            <span class="detail-title">Concentration</span>
+            <span class="detail-value">Extrait de Parfum (30%)</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-title">Key Notes</span>
+            <span class="detail-value">{{ prod.notes }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-title">Availability</span>
+            <span class="detail-value text-gold-alert">Only {{ 35 + i * 12 }} bottles left</span>
+          </div>
+        </div>
+
+        <button class="btn btn-primary acquire-btn w-full" (click)="addToCart(prod)">
+          Acquire Extrait Bottle
+        </button>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-limited" *ngIf="getLimitedProducts().length === 0">
+      <div class="empty-icon">🔒</div>
+      <h3>Vault is currently locked</h3>
+      <p>All limited edition allocations are currently reserved. Sign up to our newsletter for batch alerts.</p>
+    </div>
+  </div>
+</div>
